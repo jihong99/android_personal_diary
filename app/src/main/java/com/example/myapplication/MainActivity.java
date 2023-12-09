@@ -25,12 +25,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     ListView listView;
@@ -42,6 +44,21 @@ public class MainActivity extends AppCompatActivity {
         String[] filenames = fileList();
         itemList = new ArrayList<>(Arrays.asList(filenames));
         itemList.remove("password");
+
+        Collections.sort(itemList, new Comparator<String>() {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA);
+            @Override
+            public int compare(String o1, String o2) {
+                try{
+                    Date date1 = dateFormat.parse(o1);
+                    Date date2 = dateFormat.parse(o2);
+                    return date1.compareTo(date2);
+                }catch (ParseException e){
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+        });
 
         ArrayAdapter<String> adapter = new ArrayAdapter(
                 this, android.R.layout.simple_list_item_1, itemList);
@@ -190,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
 
         menu.add(0, 1, 0, "선택 삭제");
+        menu.add(0,2,0,"비밀번호 변경");
 
         return true;
     }
@@ -206,6 +224,20 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "삭제할 일기가 없습니다", Toast.LENGTH_SHORT).show();
                 }
                 return true;
+            case 2:
+                AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
+                dlg.setTitle("비밀번호 변경");
+                EditText edt = new EditText(MainActivity.this);
+                edt.setHint("비밀번호를 변경하세요");
+                dlg.setView(edt);
+                dlg.setPositiveButton("변경", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        writeDiary("password", edt.getText().toString());
+                        Toast.makeText(MainActivity.this, "비밀번호가 변경되었습니다", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                dlg.show();
         }
         return super.onOptionsItemSelected(item);
     }

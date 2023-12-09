@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ThirdActivity extends Activity {
     Button btnDelList, btnBack2;
@@ -34,6 +35,21 @@ public class ThirdActivity extends Activity {
         listView2 = (ListView) findViewById(R.id.listView2);
         itemList2 = new ArrayList<>(Arrays.asList(filenames));
         itemList2.remove("password");
+
+        Collections.sort(itemList2, new Comparator<String>() {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy년 MM월 dd일", Locale.KOREA);
+            @Override
+            public int compare(String o1, String o2) {
+                try{
+                    Date date1 = dateFormat.parse(o1);
+                    Date date2 = dateFormat.parse(o2);
+                    return date1.compareTo(date2);
+                }catch (ParseException e){
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+        });
 
         ArrayAdapter<String> adapter = new ArrayAdapter(
                 this, android.R.layout.simple_list_item_multiple_choice, itemList2);
