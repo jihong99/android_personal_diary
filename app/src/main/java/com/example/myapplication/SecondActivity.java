@@ -29,6 +29,7 @@ public class SecondActivity extends Activity {
         edtText = (EditText) findViewById(R.id.edtText);
         datePicker = (DatePicker) findViewById(R.id.datePicker);
 
+        /*오늘 날짜로 달력 초기화*/
         Calendar cal = Calendar.getInstance();
         datePicker.init(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
                 cal.get(Calendar.DAY_OF_MONTH), null);
@@ -79,6 +80,7 @@ public class SecondActivity extends Activity {
         });
     }
 
+    /*파일존재여부확인*/
     private boolean isFileExists(String fileName){
         File file = new File(getFilesDir(), fileName);
         return file.exists();

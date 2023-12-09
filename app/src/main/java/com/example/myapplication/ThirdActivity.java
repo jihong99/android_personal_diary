@@ -74,7 +74,6 @@ public class ThirdActivity extends Activity {
                     for (int i=checkedItems.size()-1; i>=0; i--) {
                         int position = checkedItems.keyAt(i);
                         if (checkedItems.valueAt(i)) {
-                            // 해당 위치의 아이템이 체크되었다면 삭제
                             deleteFile(itemList2.get(position));
                         }
                     }
