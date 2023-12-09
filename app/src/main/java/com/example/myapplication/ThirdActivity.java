@@ -33,6 +33,7 @@ public class ThirdActivity extends Activity {
         String[] filenames = fileList();
         listView2 = (ListView) findViewById(R.id.listView2);
         itemList2 = new ArrayList<>(Arrays.asList(filenames));
+        itemList2.remove("password");
 
         ArrayAdapter<String> adapter = new ArrayAdapter(
                 this, android.R.layout.simple_list_item_multiple_choice, itemList2);

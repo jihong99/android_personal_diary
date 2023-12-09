@@ -37,15 +37,63 @@ public class MainActivity extends AppCompatActivity {
     Button btnAddList;
     List<String> itemList = new ArrayList<>();
 
+    /*리스트 초기화*/
     private void initializeList(ListView listView){
         String[] filenames = fileList();
         itemList = new ArrayList<>(Arrays.asList(filenames));
+        itemList.remove("password");
 
         ArrayAdapter<String> adapter = new ArrayAdapter(
                 this, android.R.layout.simple_list_item_1, itemList);
         listView.setAdapter(adapter);
     }
 
+    /*비밀번호*/
+    void Login(){
+        String password = readDiary("password"); //실제 비밀번호
+
+        if(password == null){   //비밀번호가 없는 경우
+            AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
+            dlg.setTitle("비밀번호 등록");
+            dlg.setCancelable(false);
+            EditText edt = new EditText(MainActivity.this);
+            edt.setHint("비밀번호를 등록하세요");
+            dlg.setView(edt);
+            dlg.setPositiveButton("등록", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    writeDiary("password", edt.getText().toString());
+                    listView.setVisibility(View.VISIBLE);
+                    btnAddList.setVisibility(View.VISIBLE);
+                }
+            });
+            dlg.show();
+        }
+        else{   //비밀번호가 이미 있는 경우
+            AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
+            dlg.setTitle("로그인");
+            dlg.setCancelable(false);
+            EditText edt = new EditText(MainActivity.this);
+            edt.setHint("비밀번호를 입력하세요");
+            dlg.setView(edt);
+            dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(edt.getText().toString().equals(password)){
+                        listView.setVisibility(View.VISIBLE);
+                        btnAddList.setVisibility(View.VISIBLE);
+                        Toast.makeText(MainActivity.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(MainActivity.this, "비밀번호가 틀렸습니다", Toast.LENGTH_SHORT).show();
+                        Login();
+                    }
+                }
+            });
+            dlg.show();
+        }
+    }
+
+    /*메인*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView);
 
         initializeList(listView);
+
+        Login();
 
         btnAddList.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /*양방향 액티비티*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
@@ -109,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /*파일 입출력*/
     void writeDiary(String fName, String fDetail){
         try{
             FileOutputStream outFs = openFileOutput(fName, Context.MODE_PRIVATE);
@@ -132,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
         return diaryStr;
     }
 
+    /*옵션*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         super.onCreateOptionsMenu(menu);
