@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             dlg.setCancelable(false);
             EditText edt = new EditText(MainActivity.this);
             edt.setHint("비밀번호를 등록하세요");
+            edt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             dlg.setView(edt);
             dlg.setPositiveButton("등록", new DialogInterface.OnClickListener() {
                 @Override
@@ -92,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
             dlg.setCancelable(false);
             EditText edt = new EditText(MainActivity.this);
             edt.setHint("비밀번호를 입력하세요");
+            edt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             dlg.setView(edt);
             dlg.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                 @Override
@@ -229,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
                 dlg.setTitle("비밀번호 변경");
                 EditText edt = new EditText(MainActivity.this);
                 edt.setHint("비밀번호를 변경하세요");
+                edt.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 dlg.setView(edt);
                 dlg.setPositiveButton("변경", new DialogInterface.OnClickListener() {
                     @Override
